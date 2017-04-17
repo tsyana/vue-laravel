@@ -23,90 +23,13 @@ class OfoController extends Controller
         }else {
             $categoryId = $request->cid;
         }
-        $this->parseRequest($categoryId);
-
+        // $this->parseRequest($categoryId);
         return;
     }
 
-    private function parseRequest($cid) {
-        //========配置参数============
-
-        $DEPTH_COUNT = 4;           //抓取分页的深度
-        $MIN_VIEW_COUNT = 10000;    //最小阅读数
-
-        //==========================
-        $categoryId = $cid;
-
-
-        for($i = 0; $i < $DEPTH_COUNT; $i++) {
-            //目标url
-            if($i == 0){
-                //第0页的内容需要特殊处理
-                $targetUrl = "http://weixin.sogou.com/pcindex/pc/pc_{$i}/pc_{$i}.html";
-            }else{
-                $targetUrl = "http://weixin.sogou.com/pcindex/pc/pc_{$categoryId}/{$i}.html";
-            }
-
-//            Log::info($targetUrl);
-            $dom = HtmlDomParser::file_get_html($targetUrl);
-
-            foreach($dom->find('li') as $element){
-                $itemToInsert = array();
-                //收藏数
-                $viewCountTxt = $element->find('.wx-news-info2 .s-p', 0)->innertext;
-                //先取出 阅读数 xxx
-                preg_match("/阅读&nbsp;.+?&nbsp;/", $viewCountTxt,$viewCountTxt);
-                //正则取数字
-                preg_match("/\d+/", $viewCountTxt[0],$viewCountTxt);
-                $itemToInsert['view_count'] = $viewCountTxt[0];
-                if(intval($viewCountTxt[0]) < $MIN_VIEW_COUNT) {
-                    continue;
-                }
-
-                //公众号名字
-                $itemToInsert['wx_name'] = $element->find('.pos-wxrw a', 0)->find('p', 1)->innertext;
-                //avatar
-                $itemToInsert['wx_avatar'] = $element->find('.pos-wxrw img', 0)->src;
-
-
-                //标题
-                $itemToInsert['title'] = $viewCountTxt = $element->find('.wx-news-info2 h4', 0)->find('a',0)->innertext;
-                //简述
-                $itemToInsert['description'] = $element->find('.wx-news-info2 a', 1)->innertext;
-                //文章链接
-                $itemToInsert['article_link'] = $element->find('.wx-news-info2 a', 1)->href;
-                $itemToInsert['article_thumb'] = $element->find('.wx-img-box a img',0)->src;
-                $itemToInsert['topic_category'] = $categoryId;
-                $existItem = ArticleBrief::where('title', '=', $itemToInsert['title'])
-                    ->where('wx_name', '=', $itemToInsert['wx_name'])->get();
-
-//            $this->info(date("h:i:sa"));
-//                Log::info($itemToInsert);
-                if(sizeof($existItem)==0){
-                    //没有记录，插入新的
-                    ArticleBrief::create($itemToInsert);
-                }else{
-                    //更新阅读量的信息
-
-                }
-            }
-        }
-    }
-
-
-    /**
-     * 供php内置定时任务调用的数据抓取
-     */
-    public function cmdFetchData() {
-        $varObj = GlobalVar::where('key', 'cid')->find(1);
-        $cid = intval($varObj->value);
-        $this->parseRequest($cid);
-        //更新下一次要抓取的cid字符串
-        $varObj->value = ++$cid;
-        if($varObj->value >= 19){
-            $varObj->value = 0;
-        }
-        $varObj->save( );
+    public function getPassword(Request $request){
+      $result = Ofo::where('bikeId',$request->id)->get();
+      return $result;
     }
 
     public function getCategory( ) {
@@ -134,12 +57,4 @@ class OfoController extends Controller
         ];
     }
 
-    public function getList(Request $request) {
-        $page = intval($request->page);
-        $COUNT_PER_PAGE = 20;
-        $result = ArticleBrief::where('topic_category', $request->cid)
-                ->skip($COUNT_PER_PAGE * $page)
-                ->take($COUNT_PER_PAGE)->orderBy('created_at', 'DESC')->get();
-        return $result;
-    }
 }

@@ -11,26 +11,40 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+
+Vue.use(VueAxios,axios);
 export default {
-  data(){
-    return{
-      bikeNum:''
+  data() {
+    return {
+      bikeNum: ''
     }
   },
-  methods:{
-    goGet(){
-      if(this.bikeNum != ""){
+  methods: {
+    goGet() {
+      if (this.bikeNum != "") {
         this.$router.push({
-          path:'/get-password',
-          query:{
-            num:this.bikeNum
+          path: '/get-password',
+          query: {
+            num: this.bikeNum
           }
         })
-      }else{
+      } else {
         return
       }
 
     }
+  },
+  mounted() {
+    Vue.axios.get("/api/articleBrief/getPassword",{
+      params:{
+        id:1
+      }
+    }).then((response) => {
+      console.log(response.data)
+    })
   }
 }
 </script>
@@ -80,15 +94,15 @@ export default {
         border-radius: 6px;
         font-size: 16px;
     }
-    input::placeholder{
-      text-align: center;
+    input::placeholder {
+        text-align: center;
     }
-    .center{
-      text-align: center;
-      // padding-left: 0 !important;
+    .center {
+        text-align: center;
+        // padding-left: 0 !important;
     }
-    .active{
-      background: yellow !important;
+    .active {
+        background: yellow !important;
     }
 }
 </style>

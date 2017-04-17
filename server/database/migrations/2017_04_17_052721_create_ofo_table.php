@@ -16,6 +16,7 @@ class CreateOfoTable extends Migration
       Schema::create('ofo', function (Blueprint $table) {    //建立数据表user
        $table->increments('id');               //主键自增
        $table->string('password');             //'password'
+       $table->string('bikeId');             //'password'
        $table->timestamps();                   //自动生成时间戳记录创建更新时间
    });
     }

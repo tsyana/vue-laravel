@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/api/fetch', 'OfoController@doFetch');
+// Route::get('/api/articleBrief/list', 'ArticleBriefController@getList');
+Route::get('/api/articleBrief/category', 'OfoController@getCategory');
+Route::get('/api/articleBrief/getPassword', 'OfoController@getPassword');
