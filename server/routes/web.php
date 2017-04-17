@@ -19,3 +19,4 @@ Route::get('/api/articleBrief/getPassword', 'OfoController@getPassword');
 Route::get('/api/fetch', 'OfoController@doFetch');
 // Route::get('/api/articleBrief/list', 'ArticleBriefController@getList');
 Route::get('/api/articleBrief/category', 'OfoController@getCategory');
+Route::post('/api/insertPassword','OfoController@insertPassword');

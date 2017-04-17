@@ -13,10 +13,7 @@ use Sunra\PhpSimple\HtmlDomParser;
 class OfoController extends Controller
 {
     public static $NAME = 'QD';
-    /**
-     * todo :
-     * 接口分页， 智能连接
-     */
+
     public function doFetch(Request $request) {
         if(!$request->cid){
             $categoryId = 0;
@@ -30,6 +27,16 @@ class OfoController extends Controller
     public function getPassword(Request $request){
       $result = Ofo::where('bikeId',$request->id)->get();
       return $result;
+    }
+
+    public function insertPassword(Request $request){
+
+      $itemToInsert = array();
+      $itemToInsert['bikeId'] = $request->bikeId;
+      $itemToInsert['password'] = $request->password;
+
+      Ofo::create(['bikeId'=>$request->bikeId,'password'=>$request->password]);
+      return "success";
     }
 
     public function getCategory( ) {

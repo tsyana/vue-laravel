@@ -8,5 +8,5 @@ class Ofo extends Model
 {
     //
     protected $fillable = [
-        'id', 'password'];
+        'id', 'password','bikeId'];
 }

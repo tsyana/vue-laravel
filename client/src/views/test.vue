@@ -11,11 +11,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueAxios from 'vue-axios';
-import axios from 'axios';
 
-Vue.use(VueAxios,axios);
 export default {
   data() {
     return {
@@ -38,13 +34,7 @@ export default {
     }
   },
   mounted() {
-    Vue.axios.get("/api/articleBrief/getPassword",{
-      params:{
-        id:1
-      }
-    }).then((response) => {
-      console.log(response.data)
-    })
+    
   }
 }
 </script>
