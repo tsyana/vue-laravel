@@ -38,7 +38,6 @@ export default {
       if(response.data.length>0){
         this.password = response.data[0].password
       }
-      // console.log(response.data)
     })
   },
   methods:{
