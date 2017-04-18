@@ -5,6 +5,13 @@
 ## Build Setup
 
 ``` bash
+
+vue+laravel+webpack
+
+php artisan migrate
+
+php artisan serve 启动服务
+
 # install dependencies
 npm install
 
